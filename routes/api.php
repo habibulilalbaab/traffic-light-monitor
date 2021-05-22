@@ -3,6 +3,9 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
+//controller
+use App\Http\Controllers\TrafficController;
+
 /*
 |--------------------------------------------------------------------------
 | API Routes
@@ -17,6 +20,5 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
-Route::get('/traffics', function () {
-    return "ok";
-});
+Route::get('/traffics', [TrafficController::class, 'traffics']);
+Route::get('/traffics/{traffic_light_id}', [TrafficController::class, 'traffic_light_id']);
