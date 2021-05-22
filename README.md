@@ -23,8 +23,10 @@ Backend API to Monitor the Traffic Light is part of capstone project B21-CAP0442
 ```
 # install dependency
 composer install
+
 # generate new key
 php artisan key:generate
+
 # create migration
 php artisan migrate
 ```
