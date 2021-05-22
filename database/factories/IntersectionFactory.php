@@ -24,6 +24,9 @@ class IntersectionFactory extends Factory
         return [
             'traffic_id' => $this->faker->unique()->numberBetween(1, 1000),
             'name' => "north",
+            // 'name' => "west",
+            // 'name' => "south",
+            // 'name' => "east",
             'waitingTimeInSeconds' => $this->faker->numberBetween($min = 1, $max = 60),
             'currentStatus' => $this->faker->numberBetween($min = 1, $max = 3)
         ];

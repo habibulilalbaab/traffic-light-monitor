@@ -17,8 +17,8 @@ class CreateTrafficTable extends Migration
             $table->id();
             $table->string("name");
             $table->string("address");
-            $table->string("latitude");
-            $table->string("longitude");
+            $table->double("latitude");
+            $table->double("longitude");
             $table->integer("vehiclesDensityInMinutes");
             $table->timestamps();
         });

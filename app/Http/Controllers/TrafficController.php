@@ -33,7 +33,7 @@ class TrafficController extends Controller
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
-                $data = Traffic::take(5)->get(['id', 'name', 'address', 'vehiclesDensityInMinutes']);
+                $data = Traffic::inRandomOrder()->take(10)->get(['id', 'name', 'address', 'vehiclesDensityInMinutes']);
             }else {
                 $status = 'failed';
                 $message = 'Access Denied';
