@@ -11,6 +11,8 @@ class Traffic extends Model
     protected $fillable = [
         'name', 
         'address', 
+        'latitude',
+        'longitude',
         'vehiclesDensityInMinutes'
     ];
 }
