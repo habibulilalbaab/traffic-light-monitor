@@ -82,7 +82,7 @@ class IntersectionController extends Controller
             "message" => $message ?? ''
         ];
     }
-    public function traffic_intersection_destroy($id){
+    public function traffic_intersection_destroy(Request $request, $id){
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {

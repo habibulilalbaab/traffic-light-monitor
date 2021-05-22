@@ -50,7 +50,7 @@ class TrafficController extends Controller
             "data" => $data ?? ''
         ];
     }
-    public function traffic_light_id($id){
+    public function traffic_light_id(Request $request, $id){
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
@@ -123,7 +123,7 @@ class TrafficController extends Controller
             "message" => $message ?? ''
         ];
     }
-    public function traffic_destroy($id){
+    public function traffic_destroy(Request $request, $id){
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
