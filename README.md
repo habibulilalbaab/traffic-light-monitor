@@ -30,6 +30,12 @@ php artisan key:generate
 # create migration
 php artisan migrate
 ```
+- Seed Dummy Data (Dev Mode, Optional)
+```
+php artisan tinker
+Traffic::factory()->count(1000)->create()
+Intersection::factory()->count(1000)->create()
+```
 - Run Service
 ```
 php artisan serv
