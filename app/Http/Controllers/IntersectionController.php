@@ -11,8 +11,12 @@ class IntersectionController extends Controller
     public function index(Request $request){
         try {
             $status = 'success';
-            $message = '';
-            $data = Intersection::orderBy('traffic_id', 'DESC')->get(['traffic_id', 'name', 'waitingTimeInSeconds', 'currentStatus']);
+            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+                $data = Intersection::orderBy('traffic_id', 'DESC')->get(['traffic_id', 'name', 'waitingTimeInSeconds', 'currentStatus']);
+            }else {
+                $status = 'failed';
+                $message = 'Access Denied';
+            }
         } catch (\Throwable $th) {
             //throw $th;
             $status = 'failed';
@@ -21,24 +25,28 @@ class IntersectionController extends Controller
         }
         return [
             "status" => $status,
-            "message" => $message,
-            "data" => $data
+            "message" => $message ?? '',
+            "data" => $data ?? ''
         ];
     }
     public function traffic_intersection_store(Request $request){
         try {
             $status = 'success';
-            $message = '';
-            if (Traffic::where('id', $request->traffic_id)->count() > 0) {    
-                Intersection::create([
-                    'traffic_id' => $request->traffic_id,
-                    'name' => $request->name,
-                    'waitingTimeInSeconds' => $request->waitingTimeInSeconds,
-                    'currentStatus' => $request->currentStatus
-                ]);
+            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+                if (Traffic::where('id', $request->traffic_id)->count() > 0) {    
+                    Intersection::create([
+                        'traffic_id' => $request->traffic_id,
+                        'name' => $request->name,
+                        'waitingTimeInSeconds' => $request->waitingTimeInSeconds,
+                        'currentStatus' => $request->currentStatus
+                    ]);
+                }else {
+                    $status = 'failed';
+                    $message = 'Traffic sign not exist';
+                }
             }else {
                 $status = 'failed';
-                $message = 'Traffic sign not exist';
+                $message = 'Access Denied';
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -47,19 +55,23 @@ class IntersectionController extends Controller
         }
         return [
             "status" => $status,
-            "message" => $message
+            "message" => $message ?? ''
         ];
     }
     public function traffic_intersection_update(Request $request, $id){
         try {
             $status = 'success';
-            $message = '';
-            Intersection::where('id', $id)->update([
-                'traffic_id' => $request->traffic_id,
-                'name' => $request->name,
-                'waitingTimeInSeconds' => $request->waitingTimeInSeconds,
-                'currentStatus' => $request->currentStatus
-            ]);
+            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+                Intersection::where('id', $id)->update([
+                    'traffic_id' => $request->traffic_id,
+                    'name' => $request->name,
+                    'waitingTimeInSeconds' => $request->waitingTimeInSeconds,
+                    'currentStatus' => $request->currentStatus
+                ]);
+            }else {
+                $status = 'failed';
+                $message = 'Access Denied';
+            }
         } catch (\Throwable $th) {
             //throw $th;
             $status = 'failed';
@@ -67,14 +79,18 @@ class IntersectionController extends Controller
         }
         return [
             "status" => $status,
-            "message" => $message
+            "message" => $message ?? ''
         ];
     }
     public function traffic_intersection_destroy($id){
         try {
             $status = 'success';
-            $message = '';
-            Intersection::where('id', $id)->delete();
+            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+                Intersection::where('id', $id)->delete();
+            }else {
+                $status = 'failed';
+                $message = 'Access Denied';
+            }
         } catch (\Throwable $th) {
             //throw $th;
             $status = 'failed';
@@ -82,7 +98,7 @@ class IntersectionController extends Controller
         }
         return [
             "status" => $status,
-            "message" => $message
+            "message" => $message ?? ''
         ];
     }
 }
