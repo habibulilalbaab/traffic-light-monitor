@@ -13,7 +13,7 @@ class IntersectionController extends Controller
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
-                $data = Intersection::orderBy('traffic_id', 'DESC')->get(['traffic_id', 'name', 'waitingTimeInSeconds', 'currentStatus']);
+                $data = Intersection::orderBy('traffic_id', 'DESC')->get(['id', 'traffic_id', 'name', 'waitingTimeInSeconds', 'currentStatus']);
             }else {
                 $status = 'failed';
                 $message = 'Access Denied';

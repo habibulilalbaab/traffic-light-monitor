@@ -55,7 +55,7 @@ class TrafficController extends Controller
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
                 $data = Traffic::where('id', $id)->first(['id', 'name', 'address', 'vehiclesDensityInMinutes']);
-                $intersections = Intersection::where('traffic_id', $data->id)->get(['name', 'waitingTimeInSeconds', 'currentStatus']);
+                $intersections = Intersection::where('traffic_id', $data->id)->get(['id', 'name', 'waitingTimeInSeconds', 'currentStatus']);
                 $data->intersections = $intersections;
             }else {
                 $status = 'failed';
