@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\Intersection;
 use App\Models\Traffic;
+use App\Models\ApiKey;
 
 class IntersectionController extends Controller
 {
