@@ -33,13 +33,14 @@ class TrafficController extends Controller
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
+                $earthRadius = 6371;
                 $data = Traffic::selectRaw("id, name, address, latitude, longitude, vehiclesDensityInMinutes,
-                        (6371*acos(cos(radians(?))*cos(radians(latitude))*
-                        cos(radians(longitude)-radians(?))+sin(radians(?))*
-                        sin(radians(latitude)))) AS distance",
-                        [$request->latitude, $request->longitude, $request->latitude])
+                        (".$earthRadius."*acos(cos(radians(".$request->latitude."))*cos(radians(latitude))
+                        *cos(radians(longitude)-radians(".$request->longitude."))
+                        +sin(radians(".$request->latitude."))
+                        *sin(radians(latitude)))) AS distance")
                         ->having("distance", "<", $request->radius)
-                        ->orderBy("distance",'asc')
+                        ->orderBy("distance","ASC")
                         ->get();
 
             }else {
