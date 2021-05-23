@@ -12,11 +12,11 @@ class IntersectionController extends Controller
     public function index(Request $request){
         try {
             $status = 'success';
-            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+            if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 $data = Intersection::orderBy('traffic_id', 'DESC')->get(['id', 'traffic_id', 'name', 'latitude', 'longitude', 'waitingTimeInSeconds', 'currentStatus']);
             }else {
                 $status = 'failed';
-                $message = 'Access Denied';
+                $message = '401 Unauthorized ';
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -33,7 +33,7 @@ class IntersectionController extends Controller
     public function traffic_intersection_store(Request $request){
         try {
             $status = 'success';
-            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+            if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 if (Traffic::where('id', $request->traffic_id)->count() > 0) {    
                     Intersection::create([
                         'traffic_id' => $request->traffic_id,
@@ -49,7 +49,7 @@ class IntersectionController extends Controller
                 }
             }else {
                 $status = 'failed';
-                $message = 'Access Denied';
+                $message = '401 Unauthorized ';
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -64,7 +64,7 @@ class IntersectionController extends Controller
     public function traffic_intersection_update(Request $request, $id){
         try {
             $status = 'success';
-            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+            if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 Intersection::where('id', $id)->update([
                     'traffic_id' => $request->traffic_id,
                     'name' => $request->name,
@@ -75,7 +75,7 @@ class IntersectionController extends Controller
                 ]);
             }else {
                 $status = 'failed';
-                $message = 'Access Denied';
+                $message = '401 Unauthorized ';
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -90,11 +90,11 @@ class IntersectionController extends Controller
     public function traffic_intersection_destroy(Request $request, $id){
         try {
             $status = 'success';
-            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+            if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 Intersection::where('id', $id)->delete();
             }else {
                 $status = 'failed';
-                $message = 'Access Denied';
+                $message = '401 Unauthorized ';
             }
         } catch (\Throwable $th) {
             //throw $th;

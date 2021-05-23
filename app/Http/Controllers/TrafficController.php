@@ -12,11 +12,11 @@ class TrafficController extends Controller
     public function index(Request $request){
         try {
             $status = 'success';
-            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+            if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 $data = Traffic::all(['id', 'name', 'address', 'latitude', 'longitude', 'vehiclesDensityInMinutes']);
             }else {
                 $status = 'failed';
-                $message = 'Access Denied';
+                $message = '401 Unauthorized ';
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -32,11 +32,11 @@ class TrafficController extends Controller
     public function traffics(Request $request){
         try {
             $status = 'success';
-            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+            if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 $data = Traffic::inRandomOrder()->take(10)->get(['id', 'name', 'address', 'latitude', 'longitude', 'vehiclesDensityInMinutes']);
             }else {
                 $status = 'failed';
-                $message = 'Access Denied';
+                $message = '401 Unauthorized ';
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -53,13 +53,13 @@ class TrafficController extends Controller
     public function traffic_light_id(Request $request, $id){
         try {
             $status = 'success';
-            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+            if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 $data = Traffic::where('id', $id)->first(['id', 'name', 'address', 'latitude', 'longitude', 'vehiclesDensityInMinutes']);
                 $intersections = Intersection::where('traffic_id', $data->id)->get(['id', 'name', 'latitude', 'longitude', 'waitingTimeInSeconds', 'currentStatus']);
                 $data->intersections = $intersections;
             }else {
                 $status = 'failed';
-                $message = 'Access Denied';
+                $message = '401 Unauthorized ';
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -76,7 +76,7 @@ class TrafficController extends Controller
     public function traffic_store(Request $request){
         try {
             $status = 'success';
-            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+            if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 Traffic::create([
                     'name' => $request->name,
                     'address' => $request->address,
@@ -86,7 +86,7 @@ class TrafficController extends Controller
                 ]);
             }else {
                 $status = 'failed';
-                $message = 'Access Denied';
+                $message = '401 Unauthorized ';
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -101,7 +101,7 @@ class TrafficController extends Controller
     public function traffic_update(Request $request, $id){
         try {
             $status = 'success';
-            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+            if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 Traffic::where('id', $id)->update([
                     'name' => $request->name,
                     'address' => $request->address,
@@ -111,7 +111,7 @@ class TrafficController extends Controller
                 ]);
             }else {
                 $status = 'failed';
-                $message = 'Access Denied';
+                $message = '401 Unauthorized ';
             }
         } catch (\Throwable $th) {
             //throw $th;
@@ -126,12 +126,12 @@ class TrafficController extends Controller
     public function traffic_destroy(Request $request, $id){
         try {
             $status = 'success';
-            if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
+            if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 Traffic::where('id', $id)->delete();
                 Intersection::where('traffic_id', $id)->delete();
             }else {
                 $status = 'failed';
-                $message = 'Access Denied';
+                $message = '401 Unauthorized ';
             }
         } catch (\Throwable $th) {
             //throw $th;
