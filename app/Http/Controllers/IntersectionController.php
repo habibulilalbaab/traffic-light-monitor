@@ -13,7 +13,7 @@ class IntersectionController extends Controller
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
-                $data = Intersection::orderBy('traffic_id', 'DESC')->get(['id', 'traffic_id', 'name', 'waitingTimeInSeconds', 'currentStatus']);
+                $data = Intersection::orderBy('traffic_id', 'DESC')->get(['id', 'traffic_id', 'name', 'latitude', 'longitude', 'waitingTimeInSeconds', 'currentStatus']);
             }else {
                 $status = 'failed';
                 $message = 'Access Denied';
@@ -38,6 +38,8 @@ class IntersectionController extends Controller
                     Intersection::create([
                         'traffic_id' => $request->traffic_id,
                         'name' => $request->name,
+                        'latitude' => $request->latitude,
+                        'longitude' => $request->longitude,
                         'waitingTimeInSeconds' => $request->waitingTimeInSeconds,
                         'currentStatus' => $request->currentStatus
                     ]);
@@ -66,6 +68,8 @@ class IntersectionController extends Controller
                 Intersection::where('id', $id)->update([
                     'traffic_id' => $request->traffic_id,
                     'name' => $request->name,
+                    'latitude' => $request->latitude,
+                    'longitude' => $request->longitude,
                     'waitingTimeInSeconds' => $request->waitingTimeInSeconds,
                     'currentStatus' => $request->currentStatus
                 ]);

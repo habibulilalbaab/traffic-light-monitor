@@ -11,6 +11,8 @@ class Intersection extends Model
     protected $fillable = [
         'traffic_id', 
         'name', 
+        'latitude',
+        'longitude',
         'waitingTimeInSeconds',
         'currentStatus'
     ];

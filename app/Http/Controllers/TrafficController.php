@@ -13,7 +13,7 @@ class TrafficController extends Controller
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
-                $data = Traffic::all(['id', 'name', 'address', 'vehiclesDensityInMinutes']);
+                $data = Traffic::all(['id', 'name', 'address', 'latitude', 'longitude', 'vehiclesDensityInMinutes']);
             }else {
                 $status = 'failed';
                 $message = 'Access Denied';
@@ -33,7 +33,7 @@ class TrafficController extends Controller
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
-                $data = Traffic::inRandomOrder()->take(10)->get(['id', 'name', 'address', 'vehiclesDensityInMinutes']);
+                $data = Traffic::inRandomOrder()->take(10)->get(['id', 'name', 'address', 'latitude', 'longitude', 'vehiclesDensityInMinutes']);
             }else {
                 $status = 'failed';
                 $message = 'Access Denied';
@@ -54,8 +54,8 @@ class TrafficController extends Controller
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->count() > 0) {
-                $data = Traffic::where('id', $id)->first(['id', 'name', 'address', 'vehiclesDensityInMinutes']);
-                $intersections = Intersection::where('traffic_id', $data->id)->get(['id', 'name', 'waitingTimeInSeconds', 'currentStatus']);
+                $data = Traffic::where('id', $id)->first(['id', 'name', 'address', 'latitude', 'longitude', 'vehiclesDensityInMinutes']);
+                $intersections = Intersection::where('traffic_id', $data->id)->get(['id', 'name', 'latitude', 'longitude', 'waitingTimeInSeconds', 'currentStatus']);
                 $data->intersections = $intersections;
             }else {
                 $status = 'failed';

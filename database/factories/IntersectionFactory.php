@@ -27,6 +27,8 @@ class IntersectionFactory extends Factory
             // 'name' => "west",
             // 'name' => "south",
             // 'name' => "east",
+            'latitude' => $this->faker->latitude(),
+            'longitude' => $this->faker->longitude(),
             'waitingTimeInSeconds' => $this->faker->numberBetween($min = 1, $max = 60),
             'currentStatus' => $this->faker->numberBetween($min = 1, $max = 3)
         ];
