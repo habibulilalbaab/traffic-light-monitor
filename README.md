@@ -41,5 +41,8 @@ Intersection::factory()->count(1000)->create()
 php artisan serv
 ```
 
+## API Demo
+http://34.126.171.49
+
 ## API Documentation
 https://documenter.getpostman.com/view/5619074/TzXtJ1LG
