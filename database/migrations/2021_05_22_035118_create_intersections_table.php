@@ -17,6 +17,8 @@ class CreateIntersectionsTable extends Migration
             $table->id();
             $table->integer("traffic_id");
             $table->string("name");
+            $table->double("latitude");
+            $table->double("longitude");
             $table->integer("waitingTimeInSeconds");
             $table->integer("currentStatus"); // enum(RED, YELLOW, GREEN)
             $table->timestamps();
