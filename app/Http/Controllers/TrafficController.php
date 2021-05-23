@@ -33,7 +33,15 @@ class TrafficController extends Controller
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
-                $data = Traffic::inRandomOrder()->take(10)->get(['id', 'name', 'address', 'latitude', 'longitude', 'vehiclesDensityInMinutes']);
+                $data = Traffic::selectRaw("id, name, address, latitude, longitude, vehiclesDensityInMinutes,
+                        (6371*acos(cos(radians(?))*cos(radians(latitude))*
+                        cos(radians(longitude)-radians(?))+sin(radians(?))*
+                        sin(radians(latitude)))) AS distance",
+                        [$request->latitude, $request->longitude, $request->latitude])
+                        ->having("distance", "<", $request->radius)
+                        ->orderBy("distance",'asc')
+                        ->get();
+
             }else {
                 $status = 'failed';
                 $message = '401 Unauthorized ';
