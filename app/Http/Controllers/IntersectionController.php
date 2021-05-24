@@ -65,13 +65,14 @@ class IntersectionController extends Controller
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
+                $currentData = Intersection::where('id', $id)->first();
                 Intersection::where('id', $id)->update([
-                    'traffic_id' => $request->traffic_id,
-                    'name' => $request->name,
-                    'latitude' => $request->latitude,
-                    'longitude' => $request->longitude,
-                    'waitingTimeInSeconds' => $request->waitingTimeInSeconds,
-                    'currentStatus' => $request->currentStatus
+                    'traffic_id' => $request->traffic_id ?? $currentData->traffic_id,
+                    'name' => $request->name ?? $currentData->name,
+                    'latitude' => $request->latitude ?? $currentData->latitude,
+                    'longitude' => $request->longitude ?? $currentData->longitude,
+                    'waitingTimeInSeconds' => $request->waitingTimeInSeconds ?? $currentData->waitingTimeInSeconds,
+                    'currentStatus' => $request->currentStatus ?? $currentData->currentStatus
                 ]);
             }else {
                 $status = 'failed';

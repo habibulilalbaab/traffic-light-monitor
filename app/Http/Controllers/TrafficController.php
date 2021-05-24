@@ -111,12 +111,13 @@ class TrafficController extends Controller
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
+                $currentData = Traffic::where('id', $id)->first();
                 Traffic::where('id', $id)->update([
-                    'name' => $request->name,
-                    'address' => $request->address,
-                    'latitude' => $request->latitude,
-                    'longitude' => $request->longitude,
-                    'vehiclesDensityInMinutes' => $request->vehiclesDensityInMinutes
+                    'name' => $request->name ?? $currentData->name,
+                    'address' => $request->address ?? $currentData->address,
+                    'latitude' => $request->latitude ?? $currentData->latitude,
+                    'longitude' => $request->longitude ?? $currentData->longitude,
+                    'vehiclesDensityInMinutes' => $request->vehiclesDensityInMinutes ?? $currentData->vehiclesDensityInMinutes
                 ]);
             }else {
                 $status = 'failed';
