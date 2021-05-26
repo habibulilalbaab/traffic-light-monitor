@@ -9,20 +9,31 @@ use App\Models\ApiKey;
 
 class IntersectionController extends Controller
 {
+    public function Unauthorized(){
+        return response()->json([
+            "status" => "failed",
+            "message" => "401 Unauthorized",
+            "data" => ""
+        ], 401);
+    }
+    public function Catch($message){
+        return response()->json([
+            "status" => "failed",
+            "message" => $message,
+            "data" => ""
+        ], 400);
+    }
     public function index(Request $request){
         try {
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 $data = Intersection::orderBy('traffic_id', 'DESC')->get(['id', 'traffic_id', 'name', 'latitude', 'longitude', 'waitingTimeInSeconds', 'currentStatus']);
             }else {
-                $status = 'failed';
-                $message = '401 Unauthorized ';
+                return $this->Unauthorized();
             }
         } catch (\Throwable $th) {
             //throw $th;
-            $status = 'failed';
-            $message = $th->getMessage();
-            $data = '';
+            return $this->Catch($th->getMessage());
         }
         return [
             "status" => $status,
@@ -44,17 +55,14 @@ class IntersectionController extends Controller
                         'currentStatus' => $request->currentStatus
                     ]);
                 }else {
-                    $status = 'failed';
-                    $message = 'Traffic sign not exist';
+                    return $this->Catch('Traffic sign not exist');
                 }
             }else {
-                $status = 'failed';
-                $message = '401 Unauthorized ';
+                return $this->Unauthorized();
             }
         } catch (\Throwable $th) {
             //throw $th;
-            $status = 'failed';
-            $message = $th->getMessage();
+            return $this->Catch($th->getMessage());
         }
         return [
             "status" => $status,
@@ -66,22 +74,24 @@ class IntersectionController extends Controller
             $status = 'success';
             if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 $currentData = Intersection::where('id', $id)->first();
-                Intersection::where('id', $id)->update([
-                    'traffic_id' => $request->traffic_id ?? $currentData->traffic_id,
-                    'name' => $request->name ?? $currentData->name,
-                    'latitude' => $request->latitude ?? $currentData->latitude,
-                    'longitude' => $request->longitude ?? $currentData->longitude,
-                    'waitingTimeInSeconds' => $request->waitingTimeInSeconds ?? $currentData->waitingTimeInSeconds,
-                    'currentStatus' => $request->currentStatus ?? $currentData->currentStatus
-                ]);
+                if (Intersection::where('id', $id)->count() > 0) {
+                    Intersection::where('id', $id)->update([
+                        'traffic_id' => $request->traffic_id ?? $currentData->traffic_id,
+                        'name' => $request->name ?? $currentData->name,
+                        'latitude' => $request->latitude ?? $currentData->latitude,
+                        'longitude' => $request->longitude ?? $currentData->longitude,
+                        'waitingTimeInSeconds' => $request->waitingTimeInSeconds ?? $currentData->waitingTimeInSeconds,
+                        'currentStatus' => $request->currentStatus ?? $currentData->currentStatus
+                    ]);
+                }else {
+                    return $this->Catch('Intersection not exist');
+                }
             }else {
-                $status = 'failed';
-                $message = '401 Unauthorized ';
+                return $this->Unauthorized();
             }
         } catch (\Throwable $th) {
             //throw $th;
-            $status = 'failed';
-            $message = $th->getMessage();
+            return $this->Catch($th->getMessage());
         }
         return [
             "status" => $status,
@@ -94,13 +104,11 @@ class IntersectionController extends Controller
             if (ApiKey::where('key', $request->header('API_Key'))->where('status', '1')->count() > 0) {
                 Intersection::where('id', $id)->delete();
             }else {
-                $status = 'failed';
-                $message = '401 Unauthorized ';
+                return $this->Unauthorized();
             }
         } catch (\Throwable $th) {
             //throw $th;
-            $status = 'failed';
-            $message = $th->getMessage();
+            return $this->Catch($th->getMessage());
         }
         return [
             "status" => $status,
